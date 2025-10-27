@@ -1,0 +1,28 @@
+/* 1. Google Fonts primero (obligatorio) */
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* 2. Tailwind base */
+@import "tailwindcss";
+
+/* 3. Tipografía local con @font-face */
+@font-face {
+  font-family: 'Nuklear';
+  src: url('/src/assets/fonts/NUKLEAR.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 4. Variables personalizadas con @theme */
+@theme {
+  --font-unna: "Unna", serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-courier: "Courier Prime", monospace;
+  --font-nuklear: "Nuklear", sans-serif;
+
+  --color-orangelt: #f4AC45;
+  --color-orange: #D58936;
+  --color-green: #546E1D;
+  --color-white: #E4DCCE;
+  --color-black: #1E1A1D;
+}
