@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 const Contacto = ({ onNavigate }) => {
   const [showCard, setShowCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const rectanglesRef = useRef([]);
   const cardRef = useRef(null);
   const containerRef = useRef(null);
@@ -36,6 +37,17 @@ const Contacto = ({ onNavigate }) => {
     { id: '16', image: '/northernwebapp/assets/contacto16.webp', exit: { y: 0, x: -1200 } }
   ];
 
+  // Detectar mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Preload images for smooth performance
   useEffect(() => {
     const preloadImages = () => {
@@ -49,7 +61,13 @@ const Contacto = ({ onNavigate }) => {
   }, []);
 
   useEffect(() => {
-    // Initial fade in for images with GPU acceleration
+    // En mobile, ir directo a la card SIN animación
+    if (isMobile) {
+      setShowCard(true);
+      return;
+    }
+
+    // En desktop, mostrar animación completa
     const timer = setTimeout(() => {
       if (rectanglesRef.current && rectanglesRef.current.length > 0) {
         gsap.from(rectanglesRef.current, {
@@ -72,7 +90,7 @@ const Contacto = ({ onNavigate }) => {
       clearTimeout(timer);
       clearTimeout(transitionTimer);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     // Animate dots in wave pattern (business card) - only when card is shown
@@ -222,11 +240,12 @@ const Contacto = ({ onNavigate }) => {
   return (
     <div 
       ref={containerRef}
-      className="min-h-screen w-full relative overflow-hidden font-['Courier_New',monospace] bg-cover bg-center"
+      className="h-screen w-full fixed inset-0 overflow-hidden font-['Courier_New',monospace] bg-cover bg-center"
       style={{ 
         backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',
         WebkitFontSmoothing: 'antialiased',
-        MozOsxFontSmoothing: 'grayscale'
+        MozOsxFontSmoothing: 'grayscale',
+        touchAction: 'none'
       }}
     >
       {/* Top Left - Go Back (solo cuando está la card) */}
@@ -254,8 +273,8 @@ const Contacto = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* Images Grid */}
-      {!showCard && (
+      {/* Images Grid - SOLO EN DESKTOP */}
+      {!showCard && !isMobile && (
         <div className="absolute inset-0 z-30 flex items-center justify-center p-12 md:p-16 lg:p-20">
           <div className="w-full max-w-6xl">
             <div className="grid grid-cols-4 gap-x-12 md:gap-x-16 lg:gap-x-20 gap-y-16 md:gap-y-20 lg:gap-y-24">
@@ -286,14 +305,14 @@ const Contacto = ({ onNavigate }) => {
 
       {/* Business Card */}
       {showCard && (
-        <div className="absolute inset-0 flex items-center justify-center z-40 p-4 md:p-8">
+        <div className="absolute inset-0 flex items-center justify-center z-40 p-4 md:p-8 overflow-hidden">
           <div 
             ref={cardRef}
             className="bg-stone-100 w-full max-w-2xl aspect-[1.586/1] rounded-none shadow-2xl relative"
             style={{ willChange: 'transform, opacity' }}
           >
-            {/* Top section with dots - ALEJADOS DEL BORDE SUPERIOR EN MOBILE */}
-            <div className="absolute top-16 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-3">
+            {/* Top section with dots - EN EL TOP DE LA CARD */}
+            <div className="absolute top-6 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-3">
               <div ref={el => dotsRef.current[0] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
               <div ref={el => dotsRef.current[1] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
             </div>
@@ -316,8 +335,8 @@ const Contacto = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Small dots - top right - ALEJADOS EN MOBILE */}
-            <div className="absolute top-16 md:top-8 right-4 md:right-8 flex gap-2">
+            {/* Small dots - top right */}
+            <div className="absolute top-6 md:top-8 right-4 md:right-8 flex gap-2">
               <div className="w-2 h-2 bg-black rounded-full"></div>
               <div className="w-2 h-2 bg-black rounded-full"></div>
             </div>
@@ -422,19 +441,19 @@ const Contacto = ({ onNavigate }) => {
       {showModal && (
         <div 
           ref={modalOverlayRef}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           onClick={handleCloseModal}
         >
           <div 
             ref={modalRef}
-            className="bg-stone-100 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl relative"
+            className="bg-stone-100 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl relative my-8"
             onClick={(e) => e.stopPropagation()}
             style={{ willChange: 'transform, opacity' }}
           >
             {/* Close button */}
             <button
               onClick={handleCloseModal}
-              className="absolute top-6 right-6 text-black hover:text-gray-600 transition-colors z-10"
+              className="sticky top-6 left-full mr-6 text-black hover:text-gray-600 transition-colors z-10"
             >
               <X className="w-6 h-6" />
             </button>

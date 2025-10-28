@@ -85,7 +85,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
   useEffect(() => {
     if (!isVisible) {
       hasAnimatedIn.current = false;
-      // Detener todas las animaciones cuando el componente ya no es visible
       gsap.killTweensOf('*');
       return;
     }
@@ -93,7 +92,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
     if (hasAnimatedIn.current) return;
     hasAnimatedIn.current = true;
 
-    // Limpiar propiedades solo de elementos que SÍ van a animar
     gsap.set([
       ...(servicesListRef.current?.children || []),
       bottomLeftRef.current,
@@ -108,8 +106,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
       duration: 0.6,
       stagger: 0.1
     });
-
-    // SERVI y CIOS ya NO se animan - se cargan directamente
 
     tl.from(servicesListRef.current?.children || [], {
       x: 200,
@@ -138,7 +134,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
       ease: 'power2.out'
     }, '-=0.7');
 
-    // Star emoji glow
     if (starRef.current) {
       gsap.to(starRef.current, {
         opacity: 0.2,
@@ -194,15 +189,13 @@ export default function Servicios({ onNavigate, isVisible = true }) {
       if (isVisible) setVisitDuration(prev => prev + 1);
     }, 1000);
 
-    // Message rotation timer - every 30 seconds
     messageTimerRef.current = setInterval(() => {
       if (isVisible) {
         setRandomMessage(getRandomMessage());
-        setTimeout(() => setRandomMessage(''), 8000); // Hide message after 8 seconds
+        setTimeout(() => setRandomMessage(''), 8000);
       }
     }, 30000);
 
-    // Set initial message after 5 seconds
     const initialMessageTimeout = setTimeout(() => {
       if (isVisible) setRandomMessage(getRandomMessage());
       setTimeout(() => setRandomMessage(''), 8000);
@@ -234,25 +227,22 @@ export default function Servicios({ onNavigate, isVisible = true }) {
   };
 
   const handleNavigateHome = () => {
-    if (!onNavigate) {
-      return;
-    }
-    if (isExiting) {
-      return;
-    }
+    if (!onNavigate || isExiting) return;
     
     setIsExiting(true);
-    
-    // Detener todas las animaciones de GSAP inmediatamente
     gsap.killTweensOf('*');
-    
-    // Llamar a onNavigate inmediatamente
     onNavigate('home');
     
-    // Reset después de un tiempo
     setTimeout(() => {
       setIsExiting(false);
     }, 1000);
+  };
+
+  const handleServiceClick = (e) => {
+    // Solo navegar a contacto en desktop (768px+)
+    if (window.innerWidth >= 768 && onNavigate) {
+      onNavigate('contacto');
+    }
   };
 
   return (
@@ -260,7 +250,7 @@ export default function Servicios({ onNavigate, isVisible = true }) {
       className="h-screen w-full overflow-hidden flex items-start justify-start p-8 md:p-16 font-montserrat bg-cover bg-center bg-no-repeat relative"
       style={{ backgroundImage: 'url(/northernwebapp/assets/bg-home.png)' }}
     >
-      {/* Main Title - SIN animación de entrada */}
+      {/* Main Title */}
       <div ref={titleRef} className="absolute -top-4 -left-8 md:-top-6 md:-left-12">
         <h1 className="text-[100px] md:text-[200px] lg:text-[280px] font-bold tracking-tighter leading-none text-black font-montserrat relative">
           <span className="absolute inset-0 text-cyan-500 opacity-30 blur-[1px]" style={{ transform: 'translate(-1px, -1px)' }}>SERVI</span>
@@ -269,7 +259,7 @@ export default function Servicios({ onNavigate, isVisible = true }) {
         </h1>
       </div>
 
-      {/* CIOS text + circle - SIN animación de entrada */}
+      {/* CIOS text + circle */}
       <div ref={subtitleRef} className="absolute top-[50px] md:top-[120px] lg:top-[180px] left-5 md:left-16">
         <div className="relative inline-block">
           <h2 className="text-[80px] md:text-[120px] lg:text-[160px] font-bold tracking-tighter text-black font-unna italic relative">
@@ -335,57 +325,54 @@ export default function Servicios({ onNavigate, isVisible = true }) {
           disabled={isExiting}
           className="mt-2 flex md:flex-row flex-col items-end md:items-center gap-0 md:gap-3 text-xl md:text-3xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] cursor-pointer disabled:opacity-50"
         >
-          {/* Contenedor de flecha + palabra GO */}
           <div className="flex items-center gap-2">
             <ArrowLeft size={32} className="md:w-10 md:h-10 blur-[.5px]" />
             <span>GO</span>
           </div>
-
-          {/* Texto que baja en mobile */}
           <span className="md:inline block text-center">BACK HOME</span>
         </button>
       </div>
 
       {/* Services List */}
-<div 
-  ref={servicesListRef} 
-  className="absolute top-[280px] md:top-[300px] lg:top-[420px] left-8 md:left-16 right-8 
-             space-y-4 md:space-y-4 max-w-7xl z-20"
->
-  {services.map((service, index) => (
-    <div 
-      key={service.id} 
-      className="group cursor-pointer" 
-      onClick={() => onNavigate && onNavigate('contacto')}
-      onMouseEnter={() => setActiveService(service.id)}
-    >
-      <div className="flex flex-col md:flex-row md:items-center md:gap-4 md:w-full">
-        <div className="flex items-start gap-3 flex-shrink-0">
-          <span className="text-lg md:text-xl font-[Courier] text-black/60 min-w-[40px] group-hover:text-color-orange transition-colors duration-300">
-            0{index + 1}
-          </span>
-          <div className="flex items-center gap-2">
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight font-montserrat text-black group-hover:italic group-hover:text-orange border-b-2 border-black group-hover:border-color-orange break-words max-w-[90vw] md:max-w-none whitespace-nowrap">
-              {service.title}
-            </h3>
-            <span className="text-xs font-[Courier] text-black/60 group-hover:text-color-green transition-colors duration-300">*</span>
-          </div>
-        </div>
-
-        {activeService === service.id && (
+      <div 
+        ref={servicesListRef} 
+        className="absolute top-[280px] md:top-[300px] lg:top-[420px] left-8 md:left-16 right-8 
+                   space-y-4 md:space-y-4 max-w-7xl z-20"
+      >
+        {services.map((service, index) => (
           <div 
-            ref={el => detailsRefs.current[service.id] = el}
-            className="mt-1 md:mt-0 bg-orange/5 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 rounded-lg border-2 border-orange max-w-full md:max-w-2xl z-30"
+            key={service.id} 
+            className="group md:cursor-pointer" 
+            onClick={handleServiceClick}
+            onMouseEnter={() => setActiveService(service.id)}
           >
-            <p className="text-xs md:text-sm font-[Courier] text-color-orange tracking-wide leading-relaxed font-bold text-center">
-              {service.subtitle}
-            </p>
+            <div className="flex flex-col md:flex-row md:items-center md:gap-4 md:w-full">
+              <div className="flex items-start gap-3 flex-shrink-0">
+                <span className="text-lg md:text-xl font-[Courier] text-black/60 min-w-[40px] md:group-hover:text-color-orange transition-colors duration-300">
+                  0{index + 1}
+                </span>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight font-montserrat text-black md:group-hover:italic md:group-hover:text-orange border-b-2 border-black md:group-hover:border-color-orange break-words max-w-[90vw] md:max-w-none whitespace-nowrap">
+                    {service.title}
+                  </h3>
+                  <span className="text-xs font-[Courier] text-black/60 md:group-hover:text-color-green transition-colors duration-300">*</span>
+                </div>
+              </div>
+
+              {activeService === service.id && (
+                <div 
+                  ref={el => detailsRefs.current[service.id] = el}
+                  className="mt-1 md:mt-0 bg-orange/5 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 rounded-lg border-2 border-orange max-w-full md:max-w-2xl z-30"
+                >
+                  <p className="text-xs md:text-sm font-[Courier] text-color-orange tracking-wide leading-relaxed font-bold text-center">
+                    {service.subtitle}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        ))}
       </div>
-    </div>
-  ))}
-</div>
 
       {/* Bottom Section */}
       <div className="absolute bottom-8 md:bottom-16 left-8 md:left-16 right-8 md:right-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -439,7 +426,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
         <div className="absolute top-4 left-4 text-black/40 text-xl">┌</div>
         <div className="absolute bottom-4 right-4 text-black/40 text-xl">┘</div>
         
-        {/* Cryptic numbers & symbols */}
         <div className="absolute top-32 right-24 text-color-orange/30 text-xs font-[Courier] rotate-12 z-0">
           #FF6B35
         </div>
@@ -453,7 +439,6 @@ export default function Servicios({ onNavigate, isVisible = true }) {
           100.3095° W
         </div>
         
-        {/* Hand-drawn style doodles */}
         <svg className="absolute top-[25%] right-[8%] w-16 h-16 opacity-20 z-0" viewBox="0 0 100 100">
           <path d="M10,50 Q30,20 50,50 T90,50" fill="none" stroke="currentColor" strokeWidth="2" className="text-color-green"/>
           <circle cx="50" cy="50" r="3" fill="currentColor" className="text-color-orange"/>

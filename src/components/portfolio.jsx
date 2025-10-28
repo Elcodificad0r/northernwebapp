@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 
-const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
+const Portfolio = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [rotation, setRotation] = useState(0);
@@ -29,7 +29,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Content media',
       color: '#94a3b8',
       media: 'video',
-      still: '/northernwebapp/assets/topochicoStill.png',  // ✅ Corregido path
+      still: '/src/assets/topochicoStill.png',
       vimeoId: '1130042805'
     },
     {
@@ -39,7 +39,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Spot Publicitario',
       color: '#64748b',
       media: 'video',
-      still: '/northernwebapp/assets/sneakersStill.PNG',  // ✅ Corregido path
+      still: '/src/assets/sneakersStill.png',
       vimeoId: '1130728487'
     },
     {
@@ -49,7 +49,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Spot Publicitario',
       color: '#475569',
       media: 'video',
-      still: '/northernwebapp/assets/diamondStill.png',  // ✅ Corregido path
+      still: '/src/assets/diamondStill.png',
       vimeoId: '1111475204'
     },
     {
@@ -59,7 +59,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Video Corporativo',
       color: '#334155',
       media: 'video',
-      still: '/northernwebapp/assets/maqindarStill.png',  // ✅ Corregido path
+      still: '/src/assets/maqindarStill.png',
       vimeoId: '1127269112'
     },
     {
@@ -69,7 +69,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Spot Publicitario',
       color: '#1e293b',
       media: 'video',
-      still: '/northernwebapp/assets/somosStill.png',  // ✅ Corregido path
+      still: '/src/assets/somosStill.png',
       vimeoId: '1116918522'
     },
     {
@@ -79,7 +79,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
       service: 'Spot publicitario',
       color: '#0f172a',
       media: 'video',
-      still: '/northernwebapp/assets/slimpopStill.png',  // ✅ Corregido path
+      still: '/src/assets/slimpopStill.png',
       vimeoId: '1109487768'
     }
   ];
@@ -142,7 +142,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
   const getTransform = (index, total) => {
     const angle = (360 / total) * index + rotation;
     const isMobile = window.innerWidth < 768;
-    const radius = isMobile ? 180 : 280;
+    const radius = isMobile ? 140 : 280;
     const x = Math.cos((angle * Math.PI) / 180) * radius;
     const y = Math.sin((angle * Math.PI) / 180) * radius;
     
@@ -153,12 +153,12 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
   };
 
   return (
-    <div className="w-full h-screen bg-stone-100 flex items-center justify-center overflow-hidden relative font-mono">
+    <div className="w-full h-screen bg-stone-100 flex items-center justify-center overflow-hidden relative font-mono fixed inset-0">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',  // ✅ Corregido path
+          backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',
           opacity: 0.9
         }}
       />
@@ -236,7 +236,7 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
                 onClick={() => setSelectedProject(project)}
               >
                 <div 
-                  className="w-32 h-44 md:w-48 md:h-64 rounded-sm shadow-lg transition-shadow duration-300"
+                  className="w-24 h-32 md:w-48 md:h-64 rounded-sm shadow-lg transition-shadow duration-300"
                   style={{ 
                     backgroundImage: `url(${project.still})`,
                     backgroundSize: 'cover',
@@ -261,10 +261,10 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
           </div>
         )}
 
-        {/* Go Back Home Button - ✅ CORREGIDO */}
+        {/* Go Back Home Button */}
         <button 
           className="absolute top-8 left-8 flex items-center gap-3 text-2xl md:text-3xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] z-30"
-          onClick={() => onNavigate('home')}
+          onClick={() => window.location.href = '/'}
         >
           <ArrowLeft size={32} className="md:w-10 md:h-10 blur-[.5px]" />
           <span>GO BACK HOME</span>
@@ -458,16 +458,16 @@ const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
             {/* Close Button - Left Side with Pulsing Animation */}
             <button
               onClick={() => setSelectedProject(null)}
-              className="absolute top-6 left-6 text-orange hover:text-green transition-colors z-20 animate-pulse"
+              className="absolute top-6 left-6 text-stone-800 hover:text-orange-600 transition-colors z-20 animate-pulse"
               style={{
                 animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
               }}
             >
-              <X size={32} strokeWidth={2.5} className="drop-shadow-lg color-orange" />
+              <X size={32} strokeWidth={2.5} className="drop-shadow-lg" />
             </button>
 
             {/* ESC hint */}
-            <div className="absolute top-8 left-16 text-[10px] text-orange font-mono z-20 tracking-wider opacity-60">
+            <div className="absolute top-8 left-16 text-[10px] text-stone-500 font-mono z-20 tracking-wider opacity-60">
               ESC
             </div>
 
