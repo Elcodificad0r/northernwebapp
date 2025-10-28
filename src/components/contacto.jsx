@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Mail, Phone, Instagram, X } from 'lucide-react';
 import { gsap } from 'gsap';
 
-const Contacto = () => {
+const Contacto = ({ onNavigate }) => {
   const [showCard, setShowCard] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const rectanglesRef = useRef([]);
@@ -16,24 +16,24 @@ const Contacto = () => {
   const modalRef = useRef(null);
   const modalOverlayRef = useRef(null);
 
-  // Editorial style images with numbers - 16 images (4x4)
+  // Editorial style images with numbers - 16 images (4x4) - RUTAS CORREGIDAS
   const images = [
-    { id: '01', image: '/src/assets/contacto1.webp', exit: { y: -1200, x: 0 } },
-    { id: '02', image: '/src/assets/contacto2.webp', exit: { y: 0, x: -1200 } },
-    { id: '03', image: '/src/assets/contacto3.webp', exit: { y: 1200, x: 0 } },
-    { id: '04', image: '/src/assets/contacto4.webp', exit: { y: 0, x: 1200 } },
-    { id: '05', image: '/src/assets/contacto5.webp', exit: { y: -1200, x: 0 } },
-    { id: '06', image: '/src/assets/contacto6.webp', exit: { y: 0, x: 1200 } },
-    { id: '07', image: '/src/assets/contacto7.webp', exit: { y: 1200, x: 0 } },
-    { id: '08', image: '/src/assets/contacto8.webp', exit: { y: 0, x: -1200 } },
-    { id: '09', image: '/src/assets/contacto9.webp', exit: { y: 1200, x: 0 } },
-    { id: '10', image: '/src/assets/contacto10.webp', exit: { y: 0, x: 1200 } },
-    { id: '11', image: '/src/assets/contacto11.webp', exit: { y: -1200, x: 0 } },
-    { id: '12', image: '/src/assets/contacto12.webp', exit: { y: 0, x: -1200 } },
-    { id: '13', image: '/src/assets/contacto13.webp', exit: { y: -1200, x: 0 } },
-    { id: '14', image: '/src/assets/contacto14.webp', exit: { y: 0, x: 1200 } },
-    { id: '15', image: '/src/assets/contacto15.webp', exit: { y: 1200, x: 0 } },
-    { id: '16', image: '/src/assets/contacto16.webp', exit: { y: 0, x: -1200 } }
+    { id: '01', image: '/northernwebapp/assets/contacto1.webp', exit: { y: -1200, x: 0 } },
+    { id: '02', image: '/northernwebapp/assets/contacto2.webp', exit: { y: 0, x: -1200 } },
+    { id: '03', image: '/northernwebapp/assets/contacto3.webp', exit: { y: 1200, x: 0 } },
+    { id: '04', image: '/northernwebapp/assets/contacto4.webp', exit: { y: 0, x: 1200 } },
+    { id: '05', image: '/northernwebapp/assets/contacto5.webp', exit: { y: -1200, x: 0 } },
+    { id: '06', image: '/northernwebapp/assets/contacto6.webp', exit: { y: 0, x: 1200 } },
+    { id: '07', image: '/northernwebapp/assets/contacto7.webp', exit: { y: 1200, x: 0 } },
+    { id: '08', image: '/northernwebapp/assets/contacto8.webp', exit: { y: 0, x: -1200 } },
+    { id: '09', image: '/northernwebapp/assets/contacto9.webp', exit: { y: 1200, x: 0 } },
+    { id: '10', image: '/northernwebapp/assets/contacto10.webp', exit: { y: 0, x: 1200 } },
+    { id: '11', image: '/northernwebapp/assets/contacto11.webp', exit: { y: -1200, x: 0 } },
+    { id: '12', image: '/northernwebapp/assets/contacto12.webp', exit: { y: 0, x: -1200 } },
+    { id: '13', image: '/northernwebapp/assets/contacto13.webp', exit: { y: -1200, x: 0 } },
+    { id: '14', image: '/northernwebapp/assets/contacto14.webp', exit: { y: 0, x: 1200 } },
+    { id: '15', image: '/northernwebapp/assets/contacto15.webp', exit: { y: 1200, x: 0 } },
+    { id: '16', image: '/northernwebapp/assets/contacto16.webp', exit: { y: 0, x: -1200 } }
   ];
 
   // Preload images for smooth performance
@@ -170,10 +170,10 @@ const Contacto = () => {
   const handleGoHome = (e) => {
     e.preventDefault();
     
+    if (!onNavigate) return;
+
     const tl = gsap.timeline({
-      onComplete: () => {
-        window.location.href = '/';
-      }
+      onComplete: () => onNavigate('home')
     });
 
     if (cardRef.current && showCard) {
@@ -224,7 +224,7 @@ const Contacto = () => {
       ref={containerRef}
       className="min-h-screen w-full relative overflow-hidden font-['Courier_New',monospace] bg-cover bg-center"
       style={{ 
-        backgroundImage: 'url(/src/assets/bg-home.png)',
+        backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',
         WebkitFontSmoothing: 'antialiased',
         MozOsxFontSmoothing: 'grayscale'
       }}
@@ -232,14 +232,13 @@ const Contacto = () => {
       {/* Top Left - Go Back (solo cuando está la card) */}
       {showCard && (
         <div className="absolute top-4 left-4 md:top-8 md:left-8 z-50" ref={homeButtonRef}>
-          <a 
-            href="/" 
+          <button 
             onClick={handleGoHome}
             className="flex items-center gap-2 text-black hover:text-orange transition-colors group"
           >
             <ArrowLeft className="w-6 h-6 md:w-10 md:h-10 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm md:text-xl font-[NUKLEAR] blur-[.5px] tracking-widest hover:text-orange">GO BACK</span>
-          </a>
+          </button>
         </div>
       )}
 
@@ -287,75 +286,78 @@ const Contacto = () => {
 
       {/* Business Card */}
       {showCard && (
-        <div className="absolute inset-0 flex items-center justify-center z-40 p-8">
+        <div className="absolute inset-0 flex items-center justify-center z-40 p-4 md:p-8">
           <div 
             ref={cardRef}
             className="bg-stone-100 w-full max-w-2xl aspect-[1.586/1] rounded-none shadow-2xl relative"
             style={{ willChange: 'transform, opacity' }}
           >
-            {/* Top section with dots */}
-            <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex gap-3">
+            {/* Top section with dots - ALEJADOS DEL BORDE SUPERIOR EN MOBILE */}
+            <div className="absolute top-16 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-3">
               <div ref={el => dotsRef.current[0] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
               <div ref={el => dotsRef.current[1] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
             </div>
 
             {/* Main content */}
-            <div className="absolute bottom-8 left-8 space-y-6">
+            <div className="absolute bottom-8 left-4 md:left-8 space-y-4 md:space-y-6 text-sm md:text-base">
               <div>
-                <h2 className="text-2xl font-unna italic tracking-tight mb-1">SUEÑO NORTEÑO</h2>
-                <p className="text-sm tracking-wide">AGENCIA CREATIVA</p>
+                <h2 className="text-xl md:text-2xl font-unna italic tracking-tight mb-1">SUEÑO NORTEÑO</h2>
+                <p className="text-xs md:text-sm tracking-wide">AGENCIA CREATIVA</p>
               </div>
 
-              <div className="space-y-1 text-sm">
+              <div className="space-y-1 text-xs md:text-sm">
                 <p className="tracking-wide">MONTERREY, MÉXICO</p>
               </div>
 
-              <div className="space-y-1 text-sm">
+              <div className="space-y-1 text-xs md:text-sm">
                 <p className="tracking-wide">+52 81 8077 2959</p>
                 <p className="tracking-wide">@NORTHERNDREAMMX</p>
-                <p className="tracking-wide">NORTHERNDREAMMX@GMAIL.COM</p>
+                <p className="tracking-wide break-all">NORTHERNDREAMMX@GMAIL.COM</p>
               </div>
             </div>
 
-            {/* Small dots - top right */}
-            <div className="absolute top-8 right-8 flex gap-2">
+            {/* Small dots - top right - ALEJADOS EN MOBILE */}
+            <div className="absolute top-16 md:top-8 right-4 md:right-8 flex gap-2">
               <div className="w-2 h-2 bg-black rounded-full"></div>
               <div className="w-2 h-2 bg-black rounded-full"></div>
             </div>
 
             {/* Interactive buttons overlay */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-white/95">
-              <div className="grid grid-cols-2 gap-6 p-12">
+              <div className="grid grid-cols-2 gap-4 md:gap-6 p-6 md:p-12">
                 <button 
-                  onClick={() => window.open('mailto:helintryani@gmail.com')}
-                  className="flex flex-col items-center gap-3 p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  onClick={() => window.open('mailto:northerndreammx@gmail.com')}
+                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Mail className="w-8 h-8" />
-                  <span className="font-bold tracking-wider text-sm">EMAIL</span>
+                  <Mail className="w-6 h-6 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-xs md:text-sm">EMAIL</span>
                 </button>
 
                 <button 
-                  onClick={() => window.open('tel:+6285809060585')}
-                  className="flex flex-col items-center gap-3 p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  onClick={() => window.open('tel:+528180772959')}
+                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Phone className="w-8 h-8" />
-                  <span className="font-bold tracking-wider text-sm">CALL</span>
+                  <Phone className="w-6 h-6 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-xs md:text-sm">CALL</span>
                 </button>
 
                 <button 
                   onClick={() => window.open('https://instagram.com/northerndreammx')}
-                  className="flex flex-col items-center gap-3 p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Instagram className="w-8 h-8" />
-                  <span className="font-bold tracking-wider text-sm">INSTAGRAM</span>
+                  <Instagram className="w-6 h-6 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-xs md:text-sm">INSTAGRAM</span>
                 </button>
 
                 <button 
-                  onClick={() => navigator.clipboard.writeText('northerndreammx@gmail.com')}
-                  className="flex flex-col items-center gap-3 p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  onClick={() => {
+                    navigator.clipboard.writeText('northerndreammx@gmail.com');
+                    alert('Email copiado!');
+                  }}
+                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Mail className="w-8 h-8" />
-                  <span className="font-bold tracking-wider text-sm">COPY EMAIL</span>
+                  <Mail className="w-6 h-6 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-xs md:text-sm">COPY EMAIL</span>
                 </button>
               </div>
             </div>
