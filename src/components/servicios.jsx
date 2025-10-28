@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import bgHome from '../assets/bg-home.png';
 import { ArrowLeft } from 'lucide-react';
 
 export default function Servicios({ onNavigate, isVisible = true }) {
@@ -259,7 +258,7 @@ export default function Servicios({ onNavigate, isVisible = true }) {
   return (
     <div 
       className="h-screen w-full overflow-hidden flex items-start justify-start p-8 md:p-16 font-montserrat bg-cover bg-center bg-no-repeat relative"
-      style={{ backgroundImage: `url(${bgHome})` }}
+      style={{ backgroundImage: 'url(/northernwebapp/assets/bg-home.png)' }}
     >
       {/* Main Title - SIN animación de entrada */}
       <div ref={titleRef} className="absolute -top-4 -left-8 md:-top-6 md:-left-12">

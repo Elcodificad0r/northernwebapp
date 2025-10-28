@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 
-const Portfolio = () => {
+const Portfolio = ({ onNavigate }) => {  // ✅ Agregado onNavigate
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [rotation, setRotation] = useState(0);
@@ -29,7 +29,7 @@ const Portfolio = () => {
       service: 'Content media',
       color: '#94a3b8',
       media: 'video',
-      still: '/src/assets/topochicoStill.png',
+      still: '/northernwebapp/assets/topochicoStill.png',  // ✅ Corregido path
       vimeoId: '1130042805'
     },
     {
@@ -39,7 +39,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#64748b',
       media: 'video',
-      still: '/src/assets/sneakersStill.png',
+      still: '/northernwebapp/assets/sneakersStill.PNG',  // ✅ Corregido path
       vimeoId: '1130728487'
     },
     {
@@ -49,7 +49,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#475569',
       media: 'video',
-      still: '/src/assets/diamondStill.png',
+      still: '/northernwebapp/assets/diamondStill.png',  // ✅ Corregido path
       vimeoId: '1111475204'
     },
     {
@@ -59,7 +59,7 @@ const Portfolio = () => {
       service: 'Video Corporativo',
       color: '#334155',
       media: 'video',
-      still: '/src/assets/maqindarStill.png',
+      still: '/northernwebapp/assets/maqindarStill.png',  // ✅ Corregido path
       vimeoId: '1127269112'
     },
     {
@@ -69,7 +69,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#1e293b',
       media: 'video',
-      still: '/src/assets/somosStill.png',
+      still: '/northernwebapp/assets/somosStill.png',  // ✅ Corregido path
       vimeoId: '1116918522'
     },
     {
@@ -79,7 +79,7 @@ const Portfolio = () => {
       service: 'Spot publicitario',
       color: '#0f172a',
       media: 'video',
-      still: '/src/assets/slimpopStill.png',
+      still: '/northernwebapp/assets/slimpopStill.png',  // ✅ Corregido path
       vimeoId: '1109487768'
     }
   ];
@@ -158,7 +158,7 @@ const Portfolio = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/src/assets/bg-home.png)',
+          backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',  // ✅ Corregido path
           opacity: 0.9
         }}
       />
@@ -261,10 +261,10 @@ const Portfolio = () => {
           </div>
         )}
 
-        {/* Go Back Home Button */}
+        {/* Go Back Home Button - ✅ CORREGIDO */}
         <button 
           className="absolute top-8 left-8 flex items-center gap-3 text-2xl md:text-3xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] z-30"
-          onClick={() => window.location.href = '/'}
+          onClick={() => onNavigate('home')}
         >
           <ArrowLeft size={32} className="md:w-10 md:h-10 blur-[.5px]" />
           <span>GO BACK HOME</span>

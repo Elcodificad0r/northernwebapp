@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import bgHome from '../assets/bg-home.png';
 
 export default function Home({ onNavigate, isVisible }) {
   const [currentDateTime, setCurrentDateTime] = useState('');
   const [circleColor, setCircleColor] = useState('#FFB3C1');
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   const circleRef = useRef(null);
   const drip1Ref = useRef(null);
@@ -19,6 +20,23 @@ export default function Home({ onNavigate, isVisible }) {
   
   const rotationTimelines = useRef([]);
 
+  // Detectar mobile y precargar imagen
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    // Precargar imagen de alta calidad
+    const img = new Image();
+    img.src = '/northernwebapp/assets/bg-home.png';
+    img.onload = () => setImageLoaded(true);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Gestión de isVisible - limpiar animaciones GSAP
   useEffect(() => {
     if (!isVisible) {
@@ -32,7 +50,6 @@ export default function Home({ onNavigate, isVisible }) {
     console.log('🟢 Home: isVisible = true, resetting GSAP properties');
 
     // CRÍTICO: Limpiar todas las propiedades inline de GSAP
-    // Limpiar elementos individuales
     gsap.set([
       titleRef.current,
       subtitleRef.current,
@@ -44,21 +61,21 @@ export default function Home({ onNavigate, isVisible }) {
       drip4Ref.current
     ], { clearProps: 'all' });
 
-    // Limpiar los hijos de navRef (los botones)
     if (navRef.current?.children) {
       gsap.set(Array.from(navRef.current.children), { clearProps: 'all' });
     }
 
-    // Limpiar decoraciones
     if (decorationsRef.current?.children) {
       gsap.set(Array.from(decorationsRef.current.children), { clearProps: 'all' });
     }
 
-    // Reiniciar animaciones continuas
+    // Reiniciar animaciones continuas (más lentas en mobile)
+    const speedMultiplier = isMobile ? 1.5 : 1; // Más lento en mobile
+
     if (circleRef.current) {
       const tl = gsap.to(circleRef.current, { 
         rotation: 360, 
-        duration: 60, 
+        duration: 60 * speedMultiplier, 
         ease: 'none', 
         repeat: -1 
       });
@@ -68,14 +85,14 @@ export default function Home({ onNavigate, isVisible }) {
     if (drip1Ref.current) {
       const tl1 = gsap.to(drip1Ref.current, { 
         rotation: 360, 
-        duration: 25, 
+        duration: 25 * speedMultiplier, 
         ease: 'none', 
         repeat: -1, 
         transformOrigin: '200px 200px' 
       });
       const tl2 = gsap.to(drip1Ref.current, { 
         scale: gsap.utils.random(0.8, 1.5), 
-        duration: 8, 
+        duration: 8 * speedMultiplier, 
         ease: 'sine.inOut', 
         repeat: -1, 
         yoyo: true 
@@ -86,14 +103,14 @@ export default function Home({ onNavigate, isVisible }) {
     if (drip2Ref.current) {
       const tl1 = gsap.to(drip2Ref.current, { 
         rotation: -360, 
-        duration: 30, 
+        duration: 30 * speedMultiplier, 
         ease: 'none', 
         repeat: -1, 
         transformOrigin: '200px 200px' 
       });
       const tl2 = gsap.to(drip2Ref.current, { 
         scale: gsap.utils.random(0.7, 1.4), 
-        duration: 10, 
+        duration: 10 * speedMultiplier, 
         ease: 'sine.inOut', 
         repeat: -1, 
         yoyo: true 
@@ -104,14 +121,14 @@ export default function Home({ onNavigate, isVisible }) {
     if (drip3Ref.current) {
       const tl1 = gsap.to(drip3Ref.current, { 
         rotation: 360, 
-        duration: 35, 
+        duration: 35 * speedMultiplier, 
         ease: 'none', 
         repeat: -1, 
         transformOrigin: '200px 200px' 
       });
       const tl2 = gsap.to(drip3Ref.current, { 
         scale: gsap.utils.random(0.9, 1.6), 
-        duration: 12, 
+        duration: 12 * speedMultiplier, 
         ease: 'sine.inOut', 
         repeat: -1, 
         yoyo: true 
@@ -122,14 +139,14 @@ export default function Home({ onNavigate, isVisible }) {
     if (drip4Ref.current) {
       const tl1 = gsap.to(drip4Ref.current, { 
         rotation: -360, 
-        duration: 28, 
+        duration: 28 * speedMultiplier, 
         ease: 'none', 
         repeat: -1, 
         transformOrigin: '200px 200px' 
       });
       const tl2 = gsap.to(drip4Ref.current, { 
         scale: gsap.utils.random(0.8, 1.3), 
-        duration: 9, 
+        duration: 9 * speedMultiplier, 
         ease: 'sine.inOut', 
         repeat: -1, 
         yoyo: true 
@@ -141,7 +158,7 @@ export default function Home({ onNavigate, isVisible }) {
       rotationTimelines.current.forEach(tl => tl.kill());
       rotationTimelines.current = [];
     };
-  }, [isVisible]);
+  }, [isVisible, isMobile]);
 
   // Reloj y color inicial
   useEffect(() => {
@@ -233,13 +250,21 @@ export default function Home({ onNavigate, isVisible }) {
     );
   };
 
+  // Determinar qué imagen usar
+  const backgroundImage = imageLoaded 
+    ? 'url(/northernwebapp/assets/bg-home.png)'
+    : 'url(/northernwebapp/assets/bg-homelowres.jpg)';
+
   return (
     <div 
-      className="relative h-screen w-full overflow-hidden flex items-center justify-center p-4 md:p-8 font-montserrat bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${bgHome})` }}
+      className="relative h-screen w-full overflow-hidden flex items-center justify-center p-4 md:p-8 font-montserrat bg-cover bg-center bg-no-repeat transition-all duration-700"
+      style={{ 
+        backgroundImage,
+        willChange: imageLoaded ? 'auto' : 'background-image'
+      }}
     >
-      {/* Círculos y drips */}
-      <div className="absolute top-0 left-0 w-full h-full blur-2xl pointer-events-none">
+      {/* Círculos y drips - Reducir blur en mobile */}
+      <div className={`absolute top-0 left-0 w-full h-full pointer-events-none ${isMobile ? 'blur-xl' : 'blur-2xl'}`}>
         <svg className="w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
           <circle ref={circleRef} cx="200" cy="200" r="180" fill="none" stroke={circleColor} strokeWidth="8" strokeDasharray="15 10" opacity="0.7" />
           <ellipse ref={drip1Ref} cx="100" cy="100" rx="100" ry="100" fill={circleColor} opacity="0.6" />
@@ -268,11 +293,15 @@ export default function Home({ onNavigate, isVisible }) {
             CREATIVE STUDIO
           </div>
 
-          {/* Navegación */}
+          {/* Navegación - Reducir blur y efectos en mobile */}
           <div ref={navRef} className="space-y-2 md:space-y-3 font-[Nuklear] w-full max-w-4xl mx-auto">
             <div className="text-4xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-none w-full flex justify-start">
               <button
-                className="hover:text-[#d58936] hover:blur-none blur-[2px] hover:scale-105 hover:tracking-wide hover:-skew-x-6 transition-all duration-500 ease-out text-black"
+                className={`hover:text-[#d58936] text-black transition-all duration-500 ease-out ${
+                  isMobile 
+                    ? 'active:scale-95' 
+                    : 'hover:blur-none blur-[2px] hover:scale-105 hover:tracking-wide hover:-skew-x-6'
+                }`}
                 onClick={() => handleNavigate('servicios')}
               >
                 SERVICIOS
@@ -280,7 +309,11 @@ export default function Home({ onNavigate, isVisible }) {
             </div>
             <div className="text-4xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-none w-full flex justify-end">
               <button
-                className="hover:text-[#d58936] hover:blur-none blur-[2px] hover:scale-105 hover:tracking-wide hover:skew-x-6 transition-all duration-500 ease-out text-black"
+                className={`hover:text-[#d58936] text-black transition-all duration-500 ease-out ${
+                  isMobile 
+                    ? 'active:scale-95' 
+                    : 'hover:blur-none blur-[2px] hover:scale-105 hover:tracking-wide hover:skew-x-6'
+                }`}
                 onClick={() => handleNavigate('portfolio')}
               >
                 PORTFOLIO
@@ -288,7 +321,11 @@ export default function Home({ onNavigate, isVisible }) {
             </div>
             <div className="text-4xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-none w-full flex justify-center">
               <button
-                className="hover:text-[#d58936] hover:blur-none blur-[2px] hover:scale-110 hover:tracking-widest transition-all duration-500 ease-out text-black"
+                className={`hover:text-[#d58936] text-black transition-all duration-500 ease-out ${
+                  isMobile 
+                    ? 'active:scale-95' 
+                    : 'hover:blur-none blur-[2px] hover:scale-110 hover:tracking-widest'
+                }`}
                 onClick={() => handleNavigate('contacto')}
               >
                 CONTACTO
@@ -318,8 +355,9 @@ export default function Home({ onNavigate, isVisible }) {
             {currentDateTime}
           </div>
           <div className="absolute top-8 md:top-12 right-8 md:right-12 text-xs text-black font-courier">®</div>
-          <div className="absolute top-1/4 left-4 md:left-8 text-black/30 text-sm md:text-base rotate-45">↗</div>
-          <div className="absolute bottom-1/4 right-4 md:right-8 text-black/30 text-sm md:text-base -rotate-45">↙</div>
+          {/* Flechas solo en desktop */}
+          <div className="hidden md:block absolute top-1/4 left-4 md:left-8 text-black/30 text-sm md:text-base rotate-45">↗</div>
+          <div className="hidden md:block absolute bottom-1/4 right-4 md:right-8 text-black/30 text-sm md:text-base -rotate-45">↙</div>
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-[2px] opacity-40">
             {[3,1,2,3,1,4,2,1,3,2,4,1,3,2,1,4,3,2].map((h,i) => (
               <div key={i} className="w-[2px] md:w-[3px] bg-black" style={{height:`${h*3}px`}}/>
