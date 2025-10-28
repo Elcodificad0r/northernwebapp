@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 
-const Portfolio = () => {
+const Portfolio = ({ onNavigate }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [rotation, setRotation] = useState(0);
@@ -29,7 +29,7 @@ const Portfolio = () => {
       service: 'Content media',
       color: '#94a3b8',
       media: 'video',
-      still: '/src/assets/topochicoStill.png',
+      still: '/northernwebapp/assets/topochicoStill.png',
       vimeoId: '1130042805'
     },
     {
@@ -39,7 +39,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#64748b',
       media: 'video',
-      still: '/src/assets/sneakersStill.png',
+      still: '/northernwebapp/assets/sneakersStill.PNG',
       vimeoId: '1130728487'
     },
     {
@@ -49,7 +49,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#475569',
       media: 'video',
-      still: '/src/assets/diamondStill.png',
+      still: '/northernwebapp/assets/diamondStill.png',
       vimeoId: '1111475204'
     },
     {
@@ -59,7 +59,7 @@ const Portfolio = () => {
       service: 'Video Corporativo',
       color: '#334155',
       media: 'video',
-      still: '/src/assets/maqindarStill.png',
+      still: '/northernwebapp/assets/maqindarStill.png',
       vimeoId: '1127269112'
     },
     {
@@ -69,7 +69,7 @@ const Portfolio = () => {
       service: 'Spot Publicitario',
       color: '#1e293b',
       media: 'video',
-      still: '/src/assets/somosStill.png',
+      still: '/northernwebapp/assets/somosStill.png',
       vimeoId: '1116918522'
     },
     {
@@ -79,7 +79,7 @@ const Portfolio = () => {
       service: 'Spot publicitario',
       color: '#0f172a',
       media: 'video',
-      still: '/src/assets/slimpopStill.png',
+      still: '/northernwebapp/assets/slimpopStill.png',
       vimeoId: '1109487768'
     }
   ];
@@ -263,11 +263,11 @@ const Portfolio = () => {
 
         {/* Go Back Home Button */}
         <button 
-          className="absolute top-8 left-8 flex items-center gap-3 text-2xl md:text-3xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] z-30"
-          onClick={() => window.location.href = '/'}
+          className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 md:gap-3 text-lg md:text-2xl lg:text-3xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] z-30"
+          onClick={() => onNavigate && onNavigate('home')}
         >
-          <ArrowLeft size={32} className="md:w-10 md:h-10 blur-[.5px]" />
-          <span>GO BACK HOME</span>
+          <ArrowLeft size={24} className="md:w-8 md:h-8 lg:w-10 lg:h-10 blur-[.5px]" />
+          <span className="text-sm md:text-2xl lg:text-3xl">GO BACK HOME</span>
         </button>
 
         {/* DESKTOP HEAVY EDITORIAL ORNAMENTS */}
@@ -458,7 +458,7 @@ const Portfolio = () => {
             {/* Close Button - Left Side with Pulsing Animation */}
             <button
               onClick={() => setSelectedProject(null)}
-              className="absolute top-6 left-6 text-stone-800 hover:text-orange-600 transition-colors z-20 animate-pulse"
+              className="absolute top-6 left-6 text-orange hover:text-green transition-colors z-20 animate-pulse"
               style={{
                 animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
               }}
@@ -467,7 +467,7 @@ const Portfolio = () => {
             </button>
 
             {/* ESC hint */}
-            <div className="absolute top-8 left-16 text-[10px] text-stone-500 font-mono z-20 tracking-wider opacity-60">
+            <div className="absolute top-8 left-16 text-[10px] text-orange font-mono z-20 tracking-wider opacity-60">
               ESC
             </div>
 
