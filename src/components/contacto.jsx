@@ -19,22 +19,22 @@ const Contacto = ({ onNavigate }) => {
 
   // Editorial style images with numbers - 16 images (4x4) - RUTAS CORREGIDAS
   const images = [
-    { id: '01', image: '/northernwebapp/assets/contacto1.webp', exit: { y: -1200, x: 0 } },
-    { id: '02', image: '/northernwebapp/assets/contacto2.webp', exit: { y: 0, x: -1200 } },
-    { id: '03', image: '/northernwebapp/assets/contacto3.webp', exit: { y: 1200, x: 0 } },
-    { id: '04', image: '/northernwebapp/assets/contacto4.webp', exit: { y: 0, x: 1200 } },
-    { id: '05', image: '/northernwebapp/assets/contacto5.webp', exit: { y: -1200, x: 0 } },
-    { id: '06', image: '/northernwebapp/assets/contacto6.webp', exit: { y: 0, x: 1200 } },
-    { id: '07', image: '/northernwebapp/assets/contacto7.webp', exit: { y: 1200, x: 0 } },
-    { id: '08', image: '/northernwebapp/assets/contacto8.webp', exit: { y: 0, x: -1200 } },
-    { id: '09', image: '/northernwebapp/assets/contacto9.webp', exit: { y: 1200, x: 0 } },
-    { id: '10', image: '/northernwebapp/assets/contacto10.webp', exit: { y: 0, x: 1200 } },
-    { id: '11', image: '/northernwebapp/assets/contacto11.webp', exit: { y: -1200, x: 0 } },
-    { id: '12', image: '/northernwebapp/assets/contacto12.webp', exit: { y: 0, x: -1200 } },
-    { id: '13', image: '/northernwebapp/assets/contacto13.webp', exit: { y: -1200, x: 0 } },
-    { id: '14', image: '/northernwebapp/assets/contacto14.webp', exit: { y: 0, x: 1200 } },
-    { id: '15', image: '/northernwebapp/assets/contacto15.webp', exit: { y: 1200, x: 0 } },
-    { id: '16', image: '/northernwebapp/assets/contacto16.webp', exit: { y: 0, x: -1200 } }
+    { id: '01', image: '/assets/contacto1.webp', exit: { y: -1200, x: 0 } },
+    { id: '02', image: '/assets/contacto2.webp', exit: { y: 0, x: -1200 } },
+    { id: '03', image: '/assets/contacto3.webp', exit: { y: 1200, x: 0 } },
+    { id: '04', image: '/assets/contacto4.webp', exit: { y: 0, x: 1200 } },
+    { id: '05', image: '/assets/contacto5.webp', exit: { y: -1200, x: 0 } },
+    { id: '06', image: '/assets/contacto6.webp', exit: { y: 0, x: 1200 } },
+    { id: '07', image: '/assets/contacto7.webp', exit: { y: 1200, x: 0 } },
+    { id: '08', image: '/assets/contacto8.webp', exit: { y: 0, x: -1200 } },
+    { id: '09', image: '/assets/contacto9.webp', exit: { y: 1200, x: 0 } },
+    { id: '10', image: '/assets/contacto10.webp', exit: { y: 0, x: 1200 } },
+    { id: '11', image: '/assets/contacto11.webp', exit: { y: -1200, x: 0 } },
+    { id: '12', image: '/assets/contacto12.webp', exit: { y: 0, x: -1200 } },
+    { id: '13', image: '/assets/contacto13.webp', exit: { y: -1200, x: 0 } },
+    { id: '14', image: '/assets/contacto14.webp', exit: { y: 0, x: 1200 } },
+    { id: '15', image: '/assets/contacto15.webp', exit: { y: 1200, x: 0 } },
+    { id: '16', image: '/assets/contacto16.webp', exit: { y: 0, x: -1200 } }
   ];
 
   // Detectar mobile
@@ -61,6 +61,15 @@ const Contacto = ({ onNavigate }) => {
   }, []);
 
   useEffect(() => {
+    // RESETEAR TODO al montar el componente
+    setShowCard(false);
+    rectanglesRef.current = [];
+    
+    // Asegurar que el container es visible
+    if (containerRef.current) {
+      gsap.set(containerRef.current, { opacity: 1 });
+    }
+
     // En mobile, ir directo a la card SIN animación
     if (isMobile) {
       setShowCard(true);
@@ -89,6 +98,11 @@ const Contacto = ({ onNavigate }) => {
     return () => {
       clearTimeout(timer);
       clearTimeout(transitionTimer);
+      // Limpiar animaciones GSAP
+      gsap.killTweensOf(rectanglesRef.current);
+      gsap.killTweensOf(cardRef.current);
+      gsap.killTweensOf(dotsRef.current);
+      gsap.killTweensOf(bottomDotsRef.current);
     };
   }, [isMobile]);
 
@@ -191,7 +205,12 @@ const Contacto = ({ onNavigate }) => {
     if (!onNavigate) return;
 
     const tl = gsap.timeline({
-      onComplete: () => onNavigate('home')
+      onComplete: () => {
+        // Resetear completamente el estado antes de navegar
+        setShowCard(false);
+        rectanglesRef.current = [];
+        onNavigate('home');
+      }
     });
 
     if (cardRef.current && showCard) {
@@ -242,7 +261,7 @@ const Contacto = ({ onNavigate }) => {
       ref={containerRef}
       className="h-screen w-full fixed inset-0 overflow-hidden font-['Courier_New',monospace] bg-cover bg-center"
       style={{ 
-        backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',
+        backgroundImage: 'url(/assets/bg-home.png)',
         WebkitFontSmoothing: 'antialiased',
         MozOsxFontSmoothing: 'grayscale',
         touchAction: 'none'
@@ -250,13 +269,13 @@ const Contacto = ({ onNavigate }) => {
     >
       {/* Top Left - Go Back (solo cuando está la card) */}
       {showCard && (
-        <div className="absolute top-4 left-4 md:top-8 md:left-8 z-50" ref={homeButtonRef}>
+        <div className="absolute top-2 left-2 md:top-8 md:left-8 z-50" ref={homeButtonRef}>
           <button 
             onClick={handleGoHome}
-            className="flex items-center gap-2 text-black hover:text-orange transition-colors group"
+            className="flex items-center gap-1 md:gap-2 text-black hover:text-orange transition-colors group"
           >
-            <ArrowLeft className="w-6 h-6 md:w-10 md:h-10 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm md:text-xl font-[NUKLEAR] blur-[.5px] tracking-widest hover:text-orange">GO BACK</span>
+            <ArrowLeft className="w-5 h-5 md:w-10 md:h-10 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-xs md:text-xl font-[NUKLEAR] blur-[.5px] tracking-widest hover:text-orange">GO BACK</span>
           </button>
         </div>
       )}
@@ -265,9 +284,9 @@ const Contacto = ({ onNavigate }) => {
       {showCard && (
         <div 
           ref={ctaTitleRef}
-          className="absolute top-4 right-4 md:top-8 md:right-8 z-50"
+          className="absolute top-2 right-2 md:top-8 md:right-8 z-50"
         >
-          <h1 className="text-3xl md:text-6xl lg:text-8xl font-[NUKLEAR] text-black tracking-tighter blur-[.9px]">
+          <h1 className="text-2xl md:text-6xl lg:text-8xl font-[NUKLEAR] text-black tracking-tighter blur-[.9px]">
             CONNECT
           </h1>
         </div>
@@ -305,30 +324,30 @@ const Contacto = ({ onNavigate }) => {
 
       {/* Business Card */}
       {showCard && (
-        <div className="absolute inset-0 flex items-center justify-center z-40 p-4 md:p-8 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center z-40 p-2 md:p-8">
           <div 
             ref={cardRef}
-            className="bg-stone-100 w-full max-w-2xl aspect-[1.586/1] rounded-none shadow-2xl relative"
+            className="bg-stone-100 w-full max-w-[95vw] md:max-w-2xl aspect-[1.586/1] rounded-none shadow-2xl relative"
             style={{ willChange: 'transform, opacity' }}
           >
             {/* Top section with dots - EN EL TOP DE LA CARD */}
-            <div className="absolute top-6 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-3">
-              <div ref={el => dotsRef.current[0] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
-              <div ref={el => dotsRef.current[1] = el} className="w-6 h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+            <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3">
+              <div ref={el => dotsRef.current[0] = el} className="w-4 h-4 md:w-6 md:h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+              <div ref={el => dotsRef.current[1] = el} className="w-4 h-4 md:w-6 md:h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
             </div>
 
             {/* Main content */}
-            <div className="absolute bottom-8 left-4 md:left-8 space-y-4 md:space-y-6 text-sm md:text-base">
+            <div className="absolute bottom-6 md:bottom-8 left-3 md:left-8 space-y-2 md:space-y-6 text-xs md:text-base">
               <div>
-                <h2 className="text-xl md:text-2xl font-unna italic tracking-tight mb-1">SUEÑO NORTEÑO</h2>
-                <p className="text-xs md:text-sm tracking-wide">AGENCIA CREATIVA</p>
+                <h2 className="text-base md:text-2xl font-unna italic tracking-tight mb-1">SUEÑO NORTEÑO</h2>
+                <p className="text-[10px] md:text-sm tracking-wide">AGENCIA CREATIVA</p>
               </div>
 
-              <div className="space-y-1 text-xs md:text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-[10px] md:text-sm">
                 <p className="tracking-wide">MONTERREY, MÉXICO</p>
               </div>
 
-              <div className="space-y-1 text-xs md:text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-[10px] md:text-sm">
                 <p className="tracking-wide">+52 81 8077 2959</p>
                 <p className="tracking-wide">@NORTHERNDREAMMX</p>
                 <p className="tracking-wide break-all">NORTHERNDREAMMX@GMAIL.COM</p>
@@ -336,36 +355,36 @@ const Contacto = ({ onNavigate }) => {
             </div>
 
             {/* Small dots - top right */}
-            <div className="absolute top-6 md:top-8 right-4 md:right-8 flex gap-2">
-              <div className="w-2 h-2 bg-black rounded-full"></div>
-              <div className="w-2 h-2 bg-black rounded-full"></div>
+            <div className="absolute top-4 md:top-8 right-3 md:right-8 flex gap-1.5 md:gap-2">
+              <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full"></div>
+              <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full"></div>
             </div>
 
             {/* Interactive buttons overlay */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-white/95">
-              <div className="grid grid-cols-2 gap-4 md:gap-6 p-6 md:p-12">
+              <div className="grid grid-cols-2 gap-2 md:gap-6 p-4 md:p-12">
                 <button 
                   onClick={() => window.open('mailto:northerndreammx@gmail.com')}
-                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  className="flex flex-col items-center gap-1 md:gap-3 p-3 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Mail className="w-6 h-6 md:w-8 md:h-8" />
-                  <span className="font-bold tracking-wider text-xs md:text-sm">EMAIL</span>
+                  <Mail className="w-5 h-5 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-[10px] md:text-sm">EMAIL</span>
                 </button>
 
                 <button 
                   onClick={() => window.open('tel:+528180772959')}
-                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  className="flex flex-col items-center gap-1 md:gap-3 p-3 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Phone className="w-6 h-6 md:w-8 md:h-8" />
-                  <span className="font-bold tracking-wider text-xs md:text-sm">CALL</span>
+                  <Phone className="w-5 h-5 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-[10px] md:text-sm">CALL</span>
                 </button>
 
                 <button 
                   onClick={() => window.open('https://instagram.com/northerndreammx')}
-                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  className="flex flex-col items-center gap-1 md:gap-3 p-3 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Instagram className="w-6 h-6 md:w-8 md:h-8" />
-                  <span className="font-bold tracking-wider text-xs md:text-sm">INSTAGRAM</span>
+                  <Instagram className="w-5 h-5 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-[10px] md:text-sm">INSTAGRAM</span>
                 </button>
 
                 <button 
@@ -373,10 +392,10 @@ const Contacto = ({ onNavigate }) => {
                     navigator.clipboard.writeText('northerndreammx@gmail.com');
                     alert('Email copiado!');
                   }}
-                  className="flex flex-col items-center gap-2 md:gap-3 p-4 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
+                  className="flex flex-col items-center gap-1 md:gap-3 p-3 md:p-6 border-2 border-black hover:bg-black hover:text-white transition-all group"
                 >
-                  <Mail className="w-6 h-6 md:w-8 md:h-8" />
-                  <span className="font-bold tracking-wider text-xs md:text-sm">COPY EMAIL</span>
+                  <Mail className="w-5 h-5 md:w-8 md:h-8" />
+                  <span className="font-bold tracking-wider text-[10px] md:text-sm">COPY EMAIL</span>
                 </button>
               </div>
             </div>
@@ -384,51 +403,51 @@ const Contacto = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* Footer elegante y moderno */}
+      {/* Footer elegante y moderno - AJUSTADO PARA MOBILE */}
       {showCard && (
         <div 
           ref={bottomInfoRef}
           className="absolute bottom-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm"
         >
-          <div className="w-full px-4 md:px-8 py-4 md:py-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="w-full px-2 md:px-8 py-2 md:py-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
               {/* Animated dots + Brand */}
-              <div className="flex items-center gap-3">
-                <div className="flex gap-2">
-                  <div ref={el => bottomDotsRef.current[0] = el} className="w-2 h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
-                  <div ref={el => bottomDotsRef.current[1] = el} className="w-2 h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="flex gap-1 md:gap-2">
+                  <div ref={el => bottomDotsRef.current[0] = el} className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+                  <div ref={el => bottomDotsRef.current[1] = el} className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
                 </div>
-                <span className="text-xs tracking-widest font-bold text-black">SUEÑO NORTEÑO</span>
+                <span className="text-[9px] md:text-xs tracking-widest font-bold text-black">SUEÑO NORTEÑO</span>
               </div>
 
               {/* Social Links */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 md:gap-4">
                 <a 
                   href="https://instagram.com/northerndreammx"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
+                  className="flex items-center gap-1 md:gap-2 text-black hover:text-gray-600 transition-colors"
                 >
-                  <Instagram className="w-4 h-4" />
-                  <span className="text-xs tracking-wide hidden md:inline">INSTAGRAM</span>
+                  <Instagram className="w-3 h-3 md:w-4 md:h-4" />
+                  <span className="text-[9px] md:text-xs tracking-wide hidden md:inline">INSTAGRAM</span>
                 </a>
                 <a 
                   href="https://vimeo.com/user245104514"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
+                  className="flex items-center gap-1 md:gap-2 text-black hover:text-gray-600 transition-colors"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-3 h-3 md:w-4 md:h-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797l-.013.01z"/>
                   </svg>
-                  <span className="text-xs tracking-wide hidden md:inline">VIMEO</span>
+                  <span className="text-[9px] md:text-xs tracking-wide hidden md:inline">VIMEO</span>
                 </a>
               </div>
 
               {/* Terms Button */}
               <button 
                 onClick={() => setShowModal(true)}
-                className="text-xs tracking-wide text-black hover:text-gray-600 transition-colors border border-black/20 px-3 py-1.5 hover:border-black/40"
+                className="text-[9px] md:text-xs tracking-wide text-black hover:text-gray-600 transition-colors border border-black/20 px-2 py-1 md:px-3 md:py-1.5 hover:border-black/40"
               >
                 TÉRMINOS
               </button>

@@ -372,6 +372,14 @@ export default function Servicios({ onNavigate, isVisible = true }) {
             </div>
           </div>
         ))}
+
+        {/* Portfolio Button */}
+        <button
+          onClick={() => onNavigate && onNavigate('portfolio')}
+          className="mt-8 text-4xl md:text-6xl text-stone-800 hover:text-orange transition-colors font-[NUKLEAR] blur-[.5px] cursor-pointer"
+        >
+          PORTFOLIO
+        </button>
       </div>
 
       {/* Bottom Section */}

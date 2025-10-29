@@ -31,7 +31,7 @@ export default function Home({ onNavigate, isVisible }) {
 
     // Precargar imagen de alta calidad
     const img = new Image();
-    img.src = '/northernwebapp/assets/bg-home.png';
+    img.src = '/assets/bg-home.png';
     img.onload = () => setImageLoaded(true);
 
     return () => window.removeEventListener('resize', checkMobile);

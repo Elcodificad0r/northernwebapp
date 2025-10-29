@@ -21,6 +21,28 @@ const Portfolio = ({ onNavigate }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [selectedProject]);
 
+  // Prevent scroll on mobile
+  useEffect(() => {
+    const preventScroll = (e) => {
+      if (window.innerWidth < 768) {
+        e.preventDefault();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('wheel', preventScroll, { passive: false });
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('wheel', preventScroll);
+    };
+  }, []);
+
   const projects = [
     {
       id: 1,
@@ -29,7 +51,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Content media',
       color: '#94a3b8',
       media: 'video',
-      still: '/northernwebapp/assets/topochicoStill.png',
+      still: '/assets/topochicoStill.png',
       vimeoId: '1130042805'
     },
     {
@@ -39,7 +61,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Spot Publicitario',
       color: '#64748b',
       media: 'video',
-      still: '/northernwebapp/assets/sneakersStill.PNG',
+      still: '/assets/sneakersStill.PNG',
       vimeoId: '1130728487'
     },
     {
@@ -49,7 +71,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Spot Publicitario',
       color: '#475569',
       media: 'video',
-      still: '/northernwebapp/assets/diamondStill.png',
+      still: '/assets/diamondStill.png',
       vimeoId: '1111475204'
     },
     {
@@ -59,7 +81,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Video Corporativo',
       color: '#334155',
       media: 'video',
-      still: '/northernwebapp/assets/maqindarStill.png',
+      still: '/assets/maqindarStill.png',
       vimeoId: '1127269112'
     },
     {
@@ -69,7 +91,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Spot Publicitario',
       color: '#1e293b',
       media: 'video',
-      still: '/northernwebapp/assets/somosStill.png',
+      still: '/assets/somosStill.png',
       vimeoId: '1116918522'
     },
     {
@@ -79,7 +101,7 @@ const Portfolio = ({ onNavigate }) => {
       service: 'Spot publicitario',
       color: '#0f172a',
       media: 'video',
-      still: '/northernwebapp/assets/slimpopStill.png',
+      still: '/assets/slimpopStill.png',
       vimeoId: '1109487768'
     }
   ];
