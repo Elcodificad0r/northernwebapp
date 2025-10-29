@@ -158,7 +158,7 @@ const Portfolio = ({ onNavigate }) => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/northernwebapp/assets/bg-home.png)',
+          backgroundImage: 'url(/assets/bg-home.png)',
           opacity: 0.9
         }}
       />

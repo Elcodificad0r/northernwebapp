@@ -252,8 +252,8 @@ export default function Home({ onNavigate, isVisible }) {
 
   // Determinar qué imagen usar
   const backgroundImage = imageLoaded 
-    ? 'url(/northernwebapp/assets/bg-home.png)'
-    : 'url(/northernwebapp/assets/bg-homelowres.jpg)';
+    ? 'url(/assets/bg-home.png)'
+    : 'url(/assets/bg-homelowres.jpg)';
 
   return (
     <div 

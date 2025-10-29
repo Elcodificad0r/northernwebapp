@@ -248,7 +248,7 @@ export default function Servicios({ onNavigate, isVisible = true }) {
   return (
     <div 
       className="h-screen w-full overflow-hidden flex items-start justify-start p-8 md:p-16 font-montserrat bg-cover bg-center bg-no-repeat relative"
-      style={{ backgroundImage: 'url(/northernwebapp/assets/bg-home.png)' }}
+      style={{ backgroundImage: 'url(/assets/bg-home.png)' }}
     >
       {/* Main Title */}
       <div ref={titleRef} className="absolute -top-4 -left-8 md:-top-6 md:-left-12">
