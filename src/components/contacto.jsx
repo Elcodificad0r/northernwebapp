@@ -335,20 +335,23 @@ const Contacto = ({ onNavigate }) => {
 
       {/* Business Card */}
       {showCard && (
-        <div className="absolute inset-0 flex items-center justify-center z-40 px-2 py-16 md:p-8">
+        <div className="absolute inset-0 flex items-center justify-center z-40 px-2 pb-20 md:pb-8 pt-16 md:pt-8">
           <div 
             ref={cardRef}
-            className="bg-stone-100 w-full max-w-[95vw] md:max-w-2xl rounded-none shadow-2xl relative"
+            className="bg-stone-100 w-full max-w-[95vw] md:max-w-2xl rounded-none shadow-2xl relative cursor-pointer"
             style={{ 
               willChange: 'transform, opacity',
               aspectRatio: '1.586 / 1',
               maxHeight: isMobile ? 'calc(100vh - 140px)' : 'auto'
             }}
-            onClick={handleCardTouch}
-            onTouchStart={handleCardTouch}
+            onClick={isMobile ? handleCardTouch : undefined}
+            onTouchStart={isMobile ? (e) => {
+              e.stopPropagation();
+              handleCardTouch();
+            } : undefined}
           >
-            {/* Top section with dots - EN EL TOP DE LA CARD */}
-            <div className="absolute top-3 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3">
+            {/* Top section with dots - MÁS ABAJO EN LA CARD */}
+            <div className="absolute top-8 md:top-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3">
               <div ref={el => dotsRef.current[0] = el} className="w-3 h-3 md:w-6 md:h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
               <div ref={el => dotsRef.current[1] = el} className="w-3 h-3 md:w-6 md:h-6 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
             </div>
@@ -434,51 +437,51 @@ const Contacto = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* Footer elegante y moderno - AJUSTADO PARA MOBILE */}
+      {/* Footer elegante y moderno - MÁS GRANDE Y VISIBLE */}
       {showCard && (
         <div 
           ref={bottomInfoRef}
-          className="absolute bottom-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm"
+          className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-t border-black/10"
         >
-          <div className="w-full px-2 md:px-8 py-1.5 md:py-6">
-            <div className="flex flex-row items-center justify-between gap-1.5 md:gap-4 text-[8px] md:text-xs">
+          <div className="w-full px-3 md:px-8 py-3 md:py-6">
+            <div className="flex flex-row items-center justify-between gap-2 md:gap-4 text-[10px] md:text-xs">
               {/* Animated dots + Brand */}
-              <div className="flex items-center gap-1.5 md:gap-3">
+              <div className="flex items-center gap-2 md:gap-3">
                 <div className="flex gap-1 md:gap-2">
-                  <div ref={el => bottomDotsRef.current[0] = el} className="w-1 h-1 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
-                  <div ref={el => bottomDotsRef.current[1] = el} className="w-1 h-1 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+                  <div ref={el => bottomDotsRef.current[0] = el} className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
+                  <div ref={el => bottomDotsRef.current[1] = el} className="w-1.5 h-1.5 md:w-2 md:h-2 bg-black rounded-full" style={{ willChange: 'transform' }}></div>
                 </div>
                 <span className="tracking-widest font-bold text-black whitespace-nowrap">SUEÑO NORTEÑO</span>
               </div>
 
               {/* Social Links */}
-              <div className="flex items-center gap-1.5 md:gap-4">
+              <div className="flex items-center gap-2 md:gap-4">
                 <a 
                   href="https://instagram.com/northerndreammx"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-0.5 md:gap-2 text-black hover:text-gray-600 transition-colors"
+                  className="flex items-center gap-1 md:gap-2 text-black hover:text-gray-600 transition-colors"
                 >
-                  <Instagram className="w-2.5 h-2.5 md:w-4 md:h-4" />
-                  <span className="tracking-wide hidden md:inline">INSTAGRAM</span>
+                  <Instagram className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  <span className="tracking-wide hidden sm:inline">INSTAGRAM</span>
                 </a>
                 <a 
                   href="https://vimeo.com/user245104514"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-0.5 md:gap-2 text-black hover:text-gray-600 transition-colors"
+                  className="flex items-center gap-1 md:gap-2 text-black hover:text-gray-600 transition-colors"
                 >
-                  <svg className="w-2.5 h-2.5 md:w-4 md:h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797l-.013.01z"/>
                   </svg>
-                  <span className="tracking-wide hidden md:inline">VIMEO</span>
+                  <span className="tracking-wide hidden sm:inline">VIMEO</span>
                 </a>
               </div>
 
               {/* Terms Button */}
               <button 
                 onClick={() => setShowModal(true)}
-                className="tracking-wide text-black hover:text-gray-600 transition-colors border border-black/20 px-1.5 py-0.5 md:px-3 md:py-1.5 hover:border-black/40 whitespace-nowrap"
+                className="tracking-wide text-black hover:text-gray-600 transition-colors border border-black/20 px-2 py-1 md:px-3 md:py-1.5 hover:border-black/40 whitespace-nowrap text-[10px] md:text-xs"
               >
                 TÉRMINOS
               </button>

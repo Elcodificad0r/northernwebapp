@@ -46,7 +46,7 @@ const Portfolio = ({ onNavigate }) => {
   const projects = [
     {
       id: 1,
-      title: 'Topochico',
+      title: 'Topo Chico',
       date: 'Ene 2025',
       service: 'Content media',
       color: '#94a3b8',
@@ -66,7 +66,7 @@ const Portfolio = ({ onNavigate }) => {
     },
     {
       id: 3,
-      title: 'Campaña Ropa',
+      title: 'Campaña Diamond Studio',
       date: 'May 2025',
       service: 'Spot Publicitario',
       color: '#475569',
@@ -86,7 +86,7 @@ const Portfolio = ({ onNavigate }) => {
     },
     {
       id: 5,
-      title: 'Spot somos',
+      title: 'Spot Somos',
       date: 'May 2025',
       service: 'Spot Publicitario',
       color: '#1e293b',
@@ -96,7 +96,7 @@ const Portfolio = ({ onNavigate }) => {
     },
     {
       id: 6,
-      title: 'Slim pop',
+      title: 'Slim Pop',
       date: 'Dic 2024',
       service: 'Spot publicitario',
       color: '#0f172a',
